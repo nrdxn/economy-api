@@ -1,14 +1,14 @@
 import { IRequestCreateOptions, IRequestAnswer } from "@Types/BaseControllerDto";
 import { Req } from "@nestjs/common"
 import { Request } from "express"
-import * as config from "@cfg"
+import * as config from "../config"
 
 export default abstract class BaseController {
-    sendError(code: number, options: IRequestCreateOptions): IRequestAnswer {
+    sendError (code: number, options: IRequestCreateOptions): IRequestAnswer {
         return { status: false, code, ...options }
     }
 
-    sendSuccess(options: IRequestCreateOptions): IRequestAnswer {
+    sendSuccess (options: IRequestCreateOptions): IRequestAnswer {
         return { status: true, code: 200, ...options }
     }
 

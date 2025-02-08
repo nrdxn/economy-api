@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
-interface UserDto {
+export interface UserDto {
     user: string,
     generalVoice: number,
     weekVoice: number,
