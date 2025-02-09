@@ -2,6 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 export interface UserDto {
     user: string,
+    transactions: TransactionsDto,
     generalVoice: number,
     weekVoice: number,
     balance: number,
@@ -12,12 +13,45 @@ export interface UserDto {
     timelyNotifications: boolean
 }
 
+export interface TransactionsDto {
+    expenses: [
+        {
+            type: string,
+            amount: number,
+            date: number
+        }
+    ]
+    incomes: [
+        {
+            type: string,
+            amount: number,
+            date: number
+        }
+    ]
+    all: [
+        {
+            type: string,
+            amount: number,
+            date: number
+        }
+    ]
+}
+
 @Schema()
 export class User {
     @Prop()
     user: string
 
-    @Prop({ default: 0 })
+    @Prop({ type: {}, default: 
+        {
+            expenses: [],
+            incomes: [],
+            all: []
+        }
+    })
+    transactions: TransactionsDto
+    
+    @Prop()
     generalVoice: number
 
     @Prop({ default: 0 })

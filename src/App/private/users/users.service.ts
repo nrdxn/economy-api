@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDto } from './db/UserModel';
 import { Model } from 'mongoose';
-import { BalanceUpdateDto, OnlineUpdateDto } from './db/RequestsDto';
+import { BalanceUpdateDto, LeaderboardDto, OnlineUpdateDto } from './dto/RequestsDto';
 import ms from 'ms';
 
 @Injectable()
@@ -25,16 +25,32 @@ export class UsersService {
 
     async updateUserBalance (id: string, dto: BalanceUpdateDto) {
         const user = await this.findOrCreateById(id)
+        const operationValues = 
+        {
+            type: dto.transaction.operationType,
+            date: dto.transaction.operationDate,
+            amount: dto.transaction.operationAmount
+        }
+
+        user.transactions.all.push(operationValues)
 
         switch (dto.type) {
             case 'minus': {
                 user.balance -= dto.balance
+                user.transactions.expenses.push(operationValues)
+
+                user.markModified('transactions')
+                
                 user.save()
 
                 break
             }
             case 'plus': {
                 user.balance += dto.balance
+                user.transactions.incomes.push(operationValues)
+
+                user.markModified('transactions')
+
                 user.save()
 
                 break
@@ -44,11 +60,22 @@ export class UsersService {
 
     async timelyAward (id: string) {
         const user = await this.findOrCreateById(id)
-        
+        const operationValue = 
+        {
+            type: 'Временная награда',
+            date: Date.now(),
+            amount: 50
+        }
+
         user.timelyKd = Date.now() + ms('12h')
         user.timely = true
         user.balance += 50
 
+        user.transactions.all.push(operationValue)
+        user.transactions.incomes.push(operationValue)
+        
+        user.markModified('transactions')
+        
         user.save()
     }
 
@@ -61,10 +88,21 @@ export class UsersService {
 
     async updateInvites (id: string) {
         const user = await this.findOrCreateById(id)
+        const operationValue = 
+        {
+            type: 'Приглашение пользователя',
+            date: Date.now(),
+            amount: 50
+        }
 
         user.balance += 50
         user.invites++
         user.earnFromInvites += 50
+
+        user.transactions.all.push(operationValue)
+        user.transactions.incomes.push(operationValue)
+
+        user.markModified('transactions')
 
         user.save()
     }
@@ -77,5 +115,9 @@ export class UsersService {
         user.balance += Math.floor(dto.time / 60000)
         
         await user.save()
+    }
+
+    async getLeaderboardByType (dto: LeaderboardDto) {
+
     }
 }

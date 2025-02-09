@@ -17,6 +17,14 @@ export class UsersController extends BaseController {
     return (await this.usersService.findOrCreateById(req.params.id))
   }
 
+  @Get('leaderboard')
+  async getLeaderboardByType (@Req() req: Request) {
+    const checkAuth = this.checkAuth(req)
+    if (checkAuth) return checkAuth
+
+    return (await this.usersService.getLeaderboardByType(req.body))
+  }
+
   @Put(':id/update-balance')
   async updateUserBalance (@Req() req: Request) {
     const checkAuth = this.checkAuth(req)
