@@ -19,3 +19,13 @@ export interface LeaderboardDto {
 export interface OnlineUpdateDto {
     time: number
 }
+
+export interface LeaderbordMap {
+    text: string[]
+    positions: string[]
+}
+
+export interface FortmattedTime {
+    hours: number
+    minutes: number
+}

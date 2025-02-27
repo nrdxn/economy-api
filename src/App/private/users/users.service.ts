@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDto } from './db/UserModel';
 import { Model } from 'mongoose';
-import { BalanceUpdateDto, LeaderboardDto, OnlineUpdateDto } from './dto/RequestsDto';
+import { CoinEmoji } from '@cfg';
+import { BalanceUpdateDto, LeaderboardDto, OnlineUpdateDto, LeaderbordMap, FortmattedTime } from './dto/RequestsDto';
 import ms from 'ms';
 
 @Injectable()
@@ -41,7 +42,7 @@ export class UsersService {
 
                 user.markModified('transactions')
                 
-                user.save()
+                await user.save()
 
                 break
             }
@@ -51,7 +52,7 @@ export class UsersService {
 
                 user.markModified('transactions')
 
-                user.save()
+                await user.save()
 
                 break
             }
@@ -76,14 +77,14 @@ export class UsersService {
         
         user.markModified('transactions')
         
-        user.save()
+        await user.save()
     }
 
     async updateTimelyNotifications (id: string) {
         const user = await this.findOrCreateById(id)
 
         user.timelyNotifications = !user.timelyNotifications
-        user.save()
+        await user.save()
     }
 
     async updateInvites (id: string) {
@@ -104,7 +105,7 @@ export class UsersService {
 
         user.markModified('transactions')
 
-        user.save()
+        await user.save()
     }
 
     async updateOnline (id: string, dto: OnlineUpdateDto) {
@@ -118,6 +119,106 @@ export class UsersService {
     }
 
     async getLeaderboardByType (dto: LeaderboardDto) {
+        let positions: UserDto[] = []
+        const ArrayOfIndexes: number[] = []
+        const maps: LeaderbordMap = { text: [], positions: [] }
 
+        const allUsersInDb = await this.db.find
+            (
+                { 
+                    user: 
+                    { 
+                        $in: dto.members.map
+                            (
+                                (user) => user.id
+                            ) 
+                    }
+                }
+            ).sort
+            (
+                {
+                    [`${dto.type}`]: -1, user: -1
+                }
+            )
+        const limitUsersInDb = await this.db.find
+            (
+                { 
+                    user: 
+                    { 
+                        $in: dto.members.map
+                            (
+                                (user) => user.id
+                            ) 
+                    }
+                }
+            ).sort
+            (
+                {
+                    [`${dto.type}`]: -1, user: -1
+                }
+            )
+        .limit(5)
+
+      const index = allUsersInDb.map(user => user.user).indexOf(dto.currentUser) + 1
+
+      index == 1 ? positions = allUsersInDb.slice(index - 1, index + 1) : positions = allUsersInDb.slice(index - 2, index + 1)
+
+      if (index - 1 == 0) {
+          ArrayOfIndexes.push(index)
+          ArrayOfIndexes.push(index + 1)
+      } else if (
+        index == allUsersInDb.length) {
+            ArrayOfIndexes.push(index - 1)
+            ArrayOfIndexes.push(index)
+      } else {
+        ArrayOfIndexes.push(index - 1)
+        ArrayOfIndexes.push(index)
+        ArrayOfIndexes.push(index + 1)
+      }
+      
+      limitUsersInDb.map((user, i) => {
+          i++
+          if (dto.type === 'balance') {
+            maps.text.push
+            (
+                `**${i})** <@${user.user}> — ${user.balance} ${CoinEmoji}`
+            )
+          } else {
+            const formatedTime = this.formatTime(user, dto.type)
+
+            maps.text.push
+            (
+                `**${i})** <@${user.user}> — \`${formatedTime.hours} ч. ${formatedTime.minutes} м.\``
+            )
+          }
+      })
+      positions.map((user, i) => {
+        if (dto.type === 'balance') {
+            maps.positions.push
+            (
+                `**${ArrayOfIndexes[i]})** <@${user.user}> — ${user.balance} ${CoinEmoji}`
+            )
+          } 
+          else {
+            const formatedTime = this.formatTime(user, dto.type)
+
+            maps.positions.push
+            (
+                `**${ArrayOfIndexes[i]})** <@${user.user}> — \`${formatedTime.hours} ч. ${formatedTime.minutes} м.\``
+            )
+          }
+          i++
+      })
+
+      return maps
+    }
+
+    private formatTime (user: UserDto, type: string): FortmattedTime {
+        const time = type === 'weekVoice' ? (user.weekVoice / 1000) : (user.generalVoice / 1000)
+
+        return {
+            hours: Math.trunc(time / 3.6e3),
+            minutes: Math.trunc(time / 60) % 60
+        }
     }
 }
