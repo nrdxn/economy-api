@@ -51,7 +51,7 @@ export class User {
     })
     transactions: TransactionsDto
     
-    @Prop()
+    @Prop({ default: 0 })
     generalVoice: number
 
     @Prop({ default: 0 })

@@ -1,5 +1,3 @@
-import { Collection, GuildMember } from 'discord.js'
-
 export interface BalanceUpdateDto {
     balance: number
     type: 'minus' | 'plus',
@@ -13,7 +11,6 @@ export interface BalanceUpdateDto {
 export interface LeaderboardDto {
     type: 'generalVoice' | 'weekVoice' | 'balance'
     currentUser: string
-    members: Collection<string, GuildMember>
 }
 
 export interface OnlineUpdateDto {

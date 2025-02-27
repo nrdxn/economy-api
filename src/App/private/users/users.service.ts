@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDto } from './db/UserModel';
 import { Model } from 'mongoose';
-import { CoinEmoji } from '@cfg';
+import { CoinEmoji } from '../../../config';
 import { BalanceUpdateDto, LeaderboardDto, OnlineUpdateDto, LeaderbordMap, FortmattedTime } from './dto/RequestsDto';
 import ms from 'ms';
 
@@ -123,35 +123,15 @@ export class UsersService {
         const ArrayOfIndexes: number[] = []
         const maps: LeaderbordMap = { text: [], positions: [] }
 
-        const allUsersInDb = await this.db.find
-            (
-                { 
-                    user: 
-                    { 
-                        $in: dto.members.map
-                            (
-                                (user) => user.id
-                            ) 
-                    }
-                }
-            ).sort
+        const allUsersInDb = await this.db.find()
+        .sort
             (
                 {
                     [`${dto.type}`]: -1, user: -1
                 }
             )
-        const limitUsersInDb = await this.db.find
-            (
-                { 
-                    user: 
-                    { 
-                        $in: dto.members.map
-                            (
-                                (user) => user.id
-                            ) 
-                    }
-                }
-            ).sort
+        const limitUsersInDb = await this.db.find()
+        .sort
             (
                 {
                     [`${dto.type}`]: -1, user: -1
@@ -209,7 +189,7 @@ export class UsersService {
           }
           i++
       })
-
+      
       return maps
     }
 

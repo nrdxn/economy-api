@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Put} from '@nestjs/common';
+import { Controller, Get, Req, Put, Query} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request } from 'express';
 import BaseController from '@Core/BaseController';
@@ -17,12 +17,21 @@ export class UsersController extends BaseController {
     return (await this.usersService.findOrCreateById(req.params.id))
   }
 
-  @Get('leaderboard')
-  async getLeaderboardByType (@Req() req: Request) {
+  @Get('get/leaderboard')
+  async getLeaderboardByType (
+    @Req() req: Request, 
+    @Query('type') type: string, 
+    @Query('currentUser') currentUser: string
+  ) {
     const checkAuth = this.checkAuth(req)
     if (checkAuth) return checkAuth
 
-    return (await this.usersService.getLeaderboardByType(req.body))
+    return (await this.usersService.getLeaderboardByType(
+      {
+        type: type,
+        currentUser: currentUser
+     } as any
+    ))
   }
 
   @Put(':id/update-balance')
