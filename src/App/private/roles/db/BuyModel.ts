@@ -12,22 +12,22 @@ export interface BuyRoleDto {
 @Schema()
 export class Byuers {
     @Prop()
-    user: string
+    user: string;
 
     @Prop()
-    date: number
+    date: number;
 
     @Prop()
-    role: string
+    role: string;
 
     @Prop()
-    dateOfGet: number
+    dateOfGet: number;
 
     @Prop()
-    typeOfGet: string
+    typeOfGet: string;
 
     @Prop({ default: true })
-    show: boolean
+    show: boolean;
 }
 
-export const ByuersSchema = SchemaFactory.createForClass<BuyRoleDto>(Byuers)
+export const ByuersSchema = SchemaFactory.createForClass<BuyRoleDto>(Byuers);

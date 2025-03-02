@@ -16,34 +16,34 @@ export interface ShopRolesDto {
 @Schema()
 export class Shop {
     @Prop()
-    seller: string
+    seller: string;
 
     @Prop()
-    date: number
+    date: number;
 
     @Prop()
-    price: number
+    price: number;
 
     @Prop()
-    role: string
+    role: string;
 
     @Prop({ default: 0 })
-    buyCount: number
+    buyCount: number;
 
     @Prop()
-    icon: string
+    icon: string;
 
     @Prop()
-    name: string
+    name: string;
 
     @Prop({ default: true })
-    show: boolean
+    show: boolean;
 
     @Prop({ default: true })
-    showForMe: boolean
+    showForMe: boolean;
 
-    @Prop()
-    members: string[]
+    @Prop({ default: [] })
+    members: string[];
 }
 
-export const ShopSchema = SchemaFactory.createForClass<ShopRolesDto>(Shop)
+export const ShopSchema = SchemaFactory.createForClass<ShopRolesDto>(Shop);

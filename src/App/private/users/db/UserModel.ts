@@ -40,7 +40,7 @@ export interface TransactionsDto {
 @Schema()
 export class User {
     @Prop()
-    user: string
+    user: string;
 
     @Prop({ type: {}, default: 
         {
@@ -49,31 +49,31 @@ export class User {
             all: []
         }
     })
-    transactions: TransactionsDto
+    transactions: TransactionsDto;
     
     @Prop({ default: 0 })
-    generalVoice: number
+    generalVoice: number;
 
     @Prop({ default: 0 })
-    weekVoice: number
+    weekVoice: number;
 
     @Prop({ default: 0 })
-    balance: number
+    balance: number;
 
     @Prop({ default: 0 })
-    invites: number
+    invites: number;
 
     @Prop({ default: 0 })
-    earnFromInvites: number
+    earnFromInvites: number;
 
     @Prop({ default: 0 })
-    timelyKd: number
+    timelyKd: number;
 
     @Prop({ default: false })
-    timely: boolean
+    timely: boolean;
 
     @Prop({ default: false })
-    timelyNotifications: boolean
+    timelyNotifications: boolean;
 }
 
-export const UserSchema = SchemaFactory.createForClass<UserDto>(User)
+export const UserSchema = SchemaFactory.createForClass<UserDto>(User);

@@ -12,116 +12,116 @@ export class UsersService {
         @InjectModel(User.name) private db: Model<UserDto>,
     ) {}
 
-    async findOrCreateById (id: string) {
+    async findOrCreateById (userId: string) {
         let user = (await this.db.findOne({
-            user: id
-        }))
+            user: userId
+        }));
 
         if (!user) user = await this.db.create({
-            user: id
-        })
+            user: userId
+        });
 
-        return user
+        return user;
     }
 
-    async updateUserBalance (id: string, dto: BalanceUpdateDto) {
-        const user = await this.findOrCreateById(id)
+    async updateUserBalance (userId: string, dto: BalanceUpdateDto) {
+        const user = await this.findOrCreateById(userId);
         const operationValues = 
         {
             type: dto.transaction.operationType,
             date: dto.transaction.operationDate,
             amount: dto.transaction.operationAmount
-        }
+        };
 
-        user.transactions.all.push(operationValues)
+        user.transactions.all.push(operationValues);
 
         switch (dto.type) {
             case 'minus': {
-                user.balance -= dto.balance
-                user.transactions.expenses.push(operationValues)
+                user.balance -= dto.balance;
+                user.transactions.expenses.push(operationValues);
 
-                user.markModified('transactions')
+                user.markModified('transactions');
                 
-                await user.save()
+                await user.save();
 
-                break
+                break;
             }
             case 'plus': {
-                user.balance += dto.balance
-                user.transactions.incomes.push(operationValues)
+                user.balance += dto.balance;
+                user.transactions.incomes.push(operationValues);
 
-                user.markModified('transactions')
+                user.markModified('transactions');
 
-                await user.save()
+                await user.save();
 
-                break
+                break;
             }
         }
     }
 
-    async timelyAward (id: string) {
-        const user = await this.findOrCreateById(id)
+    async timelyAward (userId: string) {
+        const user = await this.findOrCreateById(userId);
         const operationValue = 
         {
             type: 'Временная награда',
             date: Date.now(),
             amount: 50
-        }
+        };
 
-        user.timelyKd = Date.now() + ms('12h')
-        user.timely = true
-        user.balance += 50
+        user.timelyKd = Date.now() + ms('12h');
+        user.timely = true;
+        user.balance += 50;
 
-        user.transactions.all.push(operationValue)
-        user.transactions.incomes.push(operationValue)
+        user.transactions.all.push(operationValue);
+        user.transactions.incomes.push(operationValue);
         
-        user.markModified('transactions')
+        user.markModified('transactions');
         
-        await user.save()
+        await user.save();
     }
 
-    async updateTimelyNotifications (id: string) {
-        const user = await this.findOrCreateById(id)
+    async updateTimelyNotifications (userId: string) {
+        const user = await this.findOrCreateById(userId);
 
-        user.timelyNotifications = !user.timelyNotifications
-        await user.save()
+        user.timelyNotifications = !user.timelyNotifications;
+        await user.save();
     }
 
-    async updateInvites (id: string) {
-        const user = await this.findOrCreateById(id)
+    async updateInvites (userId: string) {
+        const user = await this.findOrCreateById(userId);
         const operationValue = 
         {
             type: 'Приглашение пользователя',
             date: Date.now(),
             amount: 50
-        }
+        };
 
-        user.balance += 50
-        user.invites++
-        user.earnFromInvites += 50
+        user.balance += 50;
+        user.invites++;
+        user.earnFromInvites += 50;
 
-        user.transactions.all.push(operationValue)
-        user.transactions.incomes.push(operationValue)
+        user.transactions.all.push(operationValue);
+        user.transactions.incomes.push(operationValue);
 
-        user.markModified('transactions')
+        user.markModified('transactions');
 
-        await user.save()
+        await user.save();
     }
 
-    async updateOnline (id: string, dto: OnlineUpdateDto) {
-        const user = await this.findOrCreateById(id)
+    async updateOnline (userId: string, dto: OnlineUpdateDto) {
+        const user = await this.findOrCreateById(userId);
 
-        user.generalVoice += dto.time
-        user.weekVoice += dto.time
-        user.balance += Math.floor(dto.time / 60000)
+        user.generalVoice += dto.time;
+        user.weekVoice += dto.time;
+        user.balance += Math.floor(dto.time / 60000);
         
-        await user.save()
+        await user.save();
     }
 
     async getLeaderboardByType (dto: LeaderboardDto) {
-        let positions: UserDto[] = []
-        const ArrayOfIndexes: number[] = []
-        const maps: LeaderbordMap = { text: [], positions: [] }
+        let positions: UserDto[] = [];
+        const ArrayOfIndexes: number[] = [];
+        const maps: LeaderbordMap = { text: [], positions: [] };
 
         const allUsersInDb = await this.db.find()
         .sort
@@ -129,7 +129,7 @@ export class UsersService {
                 {
                     [`${dto.type}`]: -1, user: -1
                 }
-            )
+            );
         const limitUsersInDb = await this.db.find()
         .sort
             (
@@ -137,39 +137,39 @@ export class UsersService {
                     [`${dto.type}`]: -1, user: -1
                 }
             )
-        .limit(5)
+        .limit(5);
 
-      const index = allUsersInDb.map(user => user.user).indexOf(dto.currentUser) + 1
+      const index = allUsersInDb.map(user => user.user).indexOf(dto.currentUser) + 1;
 
-      index == 1 ? positions = allUsersInDb.slice(index - 1, index + 1) : positions = allUsersInDb.slice(index - 2, index + 1)
+      index == 1 ? positions = allUsersInDb.slice(index - 1, index + 1) : positions = allUsersInDb.slice(index - 2, index + 1);
 
       if (index - 1 == 0) {
-          ArrayOfIndexes.push(index)
-          ArrayOfIndexes.push(index + 1)
+          ArrayOfIndexes.push(index);
+          ArrayOfIndexes.push(index + 1);
       } else if (
         index == allUsersInDb.length) {
-            ArrayOfIndexes.push(index - 1)
-            ArrayOfIndexes.push(index)
+            ArrayOfIndexes.push(index - 1);
+            ArrayOfIndexes.push(index);
       } else {
-        ArrayOfIndexes.push(index - 1)
-        ArrayOfIndexes.push(index)
-        ArrayOfIndexes.push(index + 1)
+        ArrayOfIndexes.push(index - 1);
+        ArrayOfIndexes.push(index);
+        ArrayOfIndexes.push(index + 1);
       }
       
       limitUsersInDb.map((user, i) => {
-          i++
+          i++;
           if (dto.type === 'balance') {
             maps.text.push
             (
                 `**${i})** <@${user.user}> — ${user.balance} ${CoinEmoji}`
-            )
+            );
           } else {
-            const formatedTime = this.formatTime(user, dto.type)
+            const formatedTime = this.formatTime(user, dto.type);
 
             maps.text.push
             (
                 `**${i})** <@${user.user}> — \`${formatedTime.hours} ч. ${formatedTime.minutes} м.\``
-            )
+            );
           }
       })
       positions.map((user, i) => {
@@ -177,28 +177,28 @@ export class UsersService {
             maps.positions.push
             (
                 `**${ArrayOfIndexes[i]})** <@${user.user}> — ${user.balance} ${CoinEmoji}`
-            )
+            );
           } 
           else {
-            const formatedTime = this.formatTime(user, dto.type)
+            const formatedTime = this.formatTime(user, dto.type);
 
             maps.positions.push
             (
                 `**${ArrayOfIndexes[i]})** <@${user.user}> — \`${formatedTime.hours} ч. ${formatedTime.minutes} м.\``
-            )
+            );
           }
-          i++
+          i++;
       })
       
-      return maps
+      return maps;
     }
 
     private formatTime (user: UserDto, type: string): FortmattedTime {
-        const time = type === 'weekVoice' ? (user.weekVoice / 1000) : (user.generalVoice / 1000)
+        const time = type === 'weekVoice' ? (user.weekVoice / 1000) : (user.generalVoice / 1000);
 
         return {
             hours: Math.trunc(time / 3.6e3),
             minutes: Math.trunc(time / 60) % 60
-        }
+        };
     }
 }

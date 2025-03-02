@@ -11,10 +11,10 @@ export class UsersController extends BaseController {
 
   @Get(':id')
   async findOrCreateUser (@Req() req: Request) {
-    const checkAuth = this.checkAuth(req)
-    if (checkAuth) return checkAuth
+    const checkAuth = this.checkAuth(req);
+    if (checkAuth) return checkAuth;
 
-    return (await this.usersService.findOrCreateById(req.params.id))
+    return (await this.usersService.findOrCreateById(req.params.id));
   }
 
   @Get('get/leaderboard')
@@ -23,94 +23,54 @@ export class UsersController extends BaseController {
     @Query('type') type: string, 
     @Query('currentUser') currentUser: string
   ) {
-    const checkAuth = this.checkAuth(req)
-    if (checkAuth) return checkAuth
+    const checkAuth = this.checkAuth(req);
+    if (checkAuth) return checkAuth;
 
     return (await this.usersService.getLeaderboardByType(
       {
         type: type,
         currentUser: currentUser
      } as any
-    ))
+    ));
   }
 
   @Put(':id/update-balance')
   async updateUserBalance (@Req() req: Request) {
-    const checkAuth = this.checkAuth(req)
-    if (checkAuth) return checkAuth
+    const checkAuth = this.checkAuth(req);
+    if (checkAuth) return checkAuth;
 
-    return (await this.usersService.updateUserBalance(req.params.id, req.body)
-           .then(
-              () => this.sendSuccess(
-                { 
-                  answer: 'ok', message: 'success update of balance' 
-                }
-              )
-            )
-          )
+    return (await this.usersService.updateUserBalance(req.params.id, req.body));
   }
 
   @Put(':id/timely')
   async timelyAward (@Req() req: Request) {
-    const checkAuth = this.checkAuth(req)
-    if (checkAuth) return checkAuth
+    const checkAuth = this.checkAuth(req);
+    if (checkAuth) return checkAuth;
 
-    return (await this.usersService.timelyAward(req.params.id)
-           .then(
-              () => this.sendSuccess(
-                { 
-                  answer: 'ok', message: 'success timely award' 
-                }
-              )
-            )
-          )
+    return (await this.usersService.timelyAward(req.params.id));
   }
 
   @Put(':id/timely-notifications')
   async updateTimelyNotifications (@Req() req: Request) {
-    const checkAuth = this.checkAuth(req)
-    if (checkAuth) return checkAuth
+    const checkAuth = this.checkAuth(req);
+    if (checkAuth) return checkAuth;
 
-    return (await this.usersService.updateTimelyNotifications(req.params.id)
-           .then(
-              () => this.sendSuccess(
-                { 
-                  answer: 'ok', message: 'success update of notifications' 
-                }
-              )
-            )
-          )
+    return (await this.usersService.updateTimelyNotifications(req.params.id));
   }
 
   @Put(':id/update-invites')
   async updateInvites (@Req() req: Request) {
-    const checkAuth = this.checkAuth(req)
-    if (checkAuth) return checkAuth
+    const checkAuth = this.checkAuth(req);
+    if (checkAuth) return checkAuth;
 
-    return (await this.usersService.updateInvites(req.params.id)
-           .then(
-              () => this.sendSuccess(
-                { 
-                  answer: 'ok', message: 'success update of invites' 
-                }
-              )
-            )
-          )
+    return (await this.usersService.updateInvites(req.params.id));
   }
 
   @Put(':id/update-online')
   async updateOnline (@Req() req: Request) {
-    const checkAuth = this.checkAuth(req)
-    if (checkAuth) return checkAuth
+    const checkAuth = this.checkAuth(req);
+    if (checkAuth) return checkAuth;
 
-    return (await this.usersService.updateUserBalance(req.params.id, req.body)
-           .then(
-              () => this.sendSuccess(
-                { 
-                  answer: 'ok', message: 'success update of online' 
-                }
-              )
-            )
-          )
+    return (await this.usersService.updateUserBalance(req.params.id, req.body));
   }
 }

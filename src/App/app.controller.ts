@@ -6,10 +6,10 @@ import BaseController from '@Core/BaseController';
 export class AppController extends BaseController {
   constructor (
     private readonly appService: AppService
-  ) { super ()}
+  ) { super () }
 
   @Get()
   get () {
-    return this.sendSuccess({ answer: 'ok', message: 'Успешное подключение к API' })
+    return this.sendSuccess({ answer: 'ok', message: 'Успешное подключение к API' });
   }
 }
