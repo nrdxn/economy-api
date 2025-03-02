@@ -4,12 +4,15 @@ import BaseController from '@Core/BaseController';
 
 @Controller()
 export class AppController extends BaseController {
-  constructor (
-    private readonly appService: AppService
-  ) { super () }
+    constructor(private readonly appService: AppService) {
+        super();
+    }
 
-  @Get()
-  get () {
-    return this.sendSuccess({ answer: 'ok', message: 'Успешное подключение к API' });
-  }
+    @Get()
+    get() {
+        return this.sendSuccess({
+            answer: 'ok',
+            message: 'Успешное подключение к API'
+        });
+    }
 }

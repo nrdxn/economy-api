@@ -4,18 +4,11 @@ import { DuelsController } from './duels.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Duels, DuelsSchema } from './db/DuelsModel';
 
-@Module(
-  {
-    controllers: [ DuelsController ],
-    providers: [ DuelsService ],
+@Module({
+    controllers: [DuelsController],
+    providers: [DuelsService],
     imports: [
-      MongooseModule.forFeature(
-        [
-          { name: Duels.name, schema: DuelsSchema },
-        ]
-      )
+        MongooseModule.forFeature([{ name: Duels.name, schema: DuelsSchema }])
     ]
-  }
-)
-
+})
 export class DuelsModule {}
