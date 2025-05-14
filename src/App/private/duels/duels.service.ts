@@ -1,34 +1,30 @@
+import { Model, Types } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { DuelDto, Duels } from './db/DuelsModel';
-import { Model, Types } from 'mongoose';
-import { DuelCreateDto, DuelUpdateDto } from './dto/RequestDto';
+import { Duels } from '@/app/private/duels/db/DuelsModel';
 
 @Injectable()
 export class DuelsService {
     constructor(@InjectModel(Duels.name) private db: Model<DuelDto>) {}
 
-    async findByPlayerId(userId: string) {
-        const duel =
+    public async findByPlayerId(userID: string) {
+        return (
             (await this.db.findOne({
-                opponent: userId
+                opponent: userID
             })) ??
             (await this.db.findOne({
-                requester: userId
-            }));
-
-        return duel;
+                requester: userID
+            }))
+        );
     }
 
-    async findByMessageId(messageId: string) {
-        const duel = await this.db.findOne({
+    public async findByMessageId(messageId: string) {
+        return await this.db.findOne({
             message: messageId
         });
-
-        return duel;
     }
 
-    async createDuelInDb(dto: DuelCreateDto) {
+    public async createDuelInDb(dto: DuelCreateDto) {
         await this.db.create({
             message: dto.message,
             opponent: dto.opponent,
@@ -37,31 +33,29 @@ export class DuelsService {
         });
     }
 
-    async deleteDuelInDb(messageId: string) {
+    public async deleteDuelInDb(messageId: string) {
         await this.db.deleteOne({
             message: messageId
         });
     }
 
-    async updatePlayer(dto: DuelUpdateDto) {
-        const duel = await this.findByPlayerId(dto.userId);
+    public async updatePlayer(dto: DuelUpdateDto) {
+        const duel = await this.findByPlayerId(dto.userID);
 
         switch (dto.player) {
             case 'first': {
                 duel.first.choice = dto.item;
                 duel.first.selected = true;
                 duel.markModified('first');
-
-                await duel.save();
                 break;
             }
             case 'second': {
                 duel.second.choice = dto.item;
                 duel.markModified('second');
-
-                await duel.save();
                 break;
             }
         }
+
+        await duel.save();
     }
 }

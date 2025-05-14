@@ -1,42 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
-export interface UserDto {
-    user: string;
-    transactions: TransactionsDto;
-    generalVoice: number;
-    weekVoice: number;
-    balance: number;
-    invites: number;
-    earnFromInvites: number;
-    timelyKd: number;
-    timely: boolean;
-    timelyNotifications: boolean;
-}
-
-export interface TransactionsDto {
-    expenses: [
-        {
-            type: string;
-            amount: number;
-            date: number;
-        }
-    ];
-    incomes: [
-        {
-            type: string;
-            amount: number;
-            date: number;
-        }
-    ];
-    all: [
-        {
-            type: string;
-            amount: number;
-            date: number;
-        }
-    ];
-}
-
 @Schema()
 export class User {
     @Prop()

@@ -1,4 +1,4 @@
-export interface BalanceUpdateDto {
+interface BalanceUpdateDto {
     balance: number;
     type: 'minus' | 'plus';
     transaction: {
@@ -8,21 +8,23 @@ export interface BalanceUpdateDto {
     };
 }
 
-export interface LeaderboardDto {
-    type: 'generalVoice' | 'weekVoice' | 'balance';
+type LeaderboardSortType = 'generalVoice' | 'weekVoice' | 'balance';
+
+interface LeaderboardDto {
+    type: LeaderboardSortType;
     currentUser: string;
 }
 
-export interface OnlineUpdateDto {
+interface OnlineUpdateDto {
     time: number;
 }
 
-export interface LeaderbordMap {
+interface LeaderbordMap {
     text: string[];
     positions: string[];
 }
 
-export interface FortmattedTime {
+interface FortmattedTime {
     hours: number;
     minutes: number;
 }

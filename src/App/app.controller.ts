@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
-import BaseController from '@Core/BaseController';
+import { AppService } from '@/app/app.service';
+import BaseController from '@/core/BaseController';
 
 @Controller()
 export class AppController extends BaseController {

@@ -1,12 +1,12 @@
-export interface DuelCreateDto {
+interface DuelCreateDto {
     requester: string;
     opponent: string;
     amount: number;
     message: string;
 }
 
-export interface DuelUpdateDto {
-    userId: string;
+interface DuelUpdateDto {
+    userID: string;
     item: number;
     player: 'first' | 'second';
 }

@@ -1,14 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
-export interface BuyRoleDto {
-    user: string
-    role: string
-    show: boolean
-    date: number
-    dateOfGet: number
-    typeOfGet: string
-}
-
 @Schema()
 export class Byuers {
     @Prop()

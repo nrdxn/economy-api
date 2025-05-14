@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DuelsService } from './duels.service';
-import { DuelsController } from './duels.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Duels, DuelsSchema } from './db/DuelsModel';
+import { DuelsService } from '@/app/private/duels/duels.service';
+import { DuelsController } from '@/app/private/duels/duels.controller';
+import { Duels, DuelsSchema } from '@/app/private/duels/db/DuelsModel';
 
 @Module({
     controllers: [DuelsController],

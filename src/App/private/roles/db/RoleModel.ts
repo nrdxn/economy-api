@@ -1,16 +1,16 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 export interface ShopRolesDto {
-    seller: string
-    role: string
-    show: boolean
-    showForMe: boolean
-    name: string
-    price: number
-    date: number
-    buyCount: number
-    icon: string
-    members: string[]
+    seller: string;
+    role: string;
+    show: boolean;
+    showForMe: boolean;
+    name: string;
+    price: number;
+    date: number;
+    buyCount: number;
+    icon: string;
+    members: string[];
 }
 
 @Schema()

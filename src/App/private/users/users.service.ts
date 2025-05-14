@@ -1,36 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDto } from './db/UserModel';
 import { Model } from 'mongoose';
+import { User } from '@/app/private/users/db/UserModel';
 import { CoinEmoji } from '../../../config';
-import {
-    BalanceUpdateDto,
-    LeaderboardDto,
-    OnlineUpdateDto,
-    LeaderbordMap,
-    FortmattedTime
-} from './dto/RequestsDto';
 import ms from 'ms';
 
 @Injectable()
 export class UsersService {
     constructor(@InjectModel(User.name) private db: Model<UserDto>) {}
 
-    async findOrCreateById(userId: string) {
+    public async findOrCreateById(userID: string) {
         let user = await this.db.findOne({
-            user: userId
+            user: userID
         });
 
         if (!user)
             user = await this.db.create({
-                user: userId
+                user: userID
             });
 
         return user;
     }
 
-    async updateUserBalance(userId: string, dto: BalanceUpdateDto) {
-        const user = await this.findOrCreateById(userId);
+    public async updateUserBalance(userID: string, dto: BalanceUpdateDto) {
+        const user = await this.findOrCreateById(userID);
         const operationValues = {
             type: dto.transaction.operationType,
             date: dto.transaction.operationDate,
@@ -43,28 +36,22 @@ export class UsersService {
             case 'minus': {
                 user.balance -= dto.balance;
                 user.transactions.expenses.push(operationValues);
-
                 user.markModified('transactions');
-
-                await user.save();
-
                 break;
             }
             case 'plus': {
                 user.balance += dto.balance;
                 user.transactions.incomes.push(operationValues);
-
                 user.markModified('transactions');
-
-                await user.save();
-
                 break;
             }
         }
+
+        await user.save();
     }
 
-    async timelyAward(userId: string) {
-        const user = await this.findOrCreateById(userId);
+    public async timelyAward(userID: string) {
+        const user = await this.findOrCreateById(userID);
         const operationValue = {
             type: 'Временная награда',
             date: Date.now(),
@@ -83,15 +70,15 @@ export class UsersService {
         await user.save();
     }
 
-    async updateTimelyNotifications(userId: string) {
-        const user = await this.findOrCreateById(userId);
+    public async updateTimelyNotifications(userID: string) {
+        const user = await this.findOrCreateById(userID);
 
         user.timelyNotifications = !user.timelyNotifications;
         await user.save();
     }
 
-    async updateInvites(userId: string) {
-        const user = await this.findOrCreateById(userId);
+    public async updateInvites(userID: string) {
+        const user = await this.findOrCreateById(userID);
         const operationValue = {
             type: 'Приглашение пользователя',
             date: Date.now(),
@@ -110,8 +97,8 @@ export class UsersService {
         await user.save();
     }
 
-    async updateOnline(userId: string, dto: OnlineUpdateDto) {
-        const user = await this.findOrCreateById(userId);
+    public async updateOnline(userID: string, dto: OnlineUpdateDto) {
+        const user = await this.findOrCreateById(userID);
 
         user.generalVoice += dto.time;
         user.weekVoice += dto.time;
@@ -120,7 +107,7 @@ export class UsersService {
         await user.save();
     }
 
-    async getLeaderboardByType(dto: LeaderboardDto) {
+    public async getLeaderboardByType(dto: LeaderboardDto) {
         let positions: UserDto[] = [];
         const ArrayOfIndexes: number[] = [];
         const maps: LeaderbordMap = { text: [], positions: [] };

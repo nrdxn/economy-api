@@ -17,18 +17,16 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "baseUrl": "./",
     "paths": {
-      "@Core/*": [
-        "./src/Core/*"
+      "@/core/*": [
+        "src/core/*"
       ],
-      "@App/*": [
-        "./src/App/*"
+      "@/app/*": [
+        "src/app/*"
       ],
-      "@Types/*": [
-        "./src/Types/*"
-      ],
-      "@cfg": [
-        "./src/config.ts"
+      "@/cfg": [
+        "src/config.ts"
       ]
     }
   }

@@ -1,7 +1,7 @@
 import { Controller, Get, Req, Put } from '@nestjs/common';
-import { DuelsService } from './duels.service';
+import { DuelsService } from '@/app/private/duels/duels.service';
 import { Request } from 'express';
-import BaseController from '@Core/BaseController';
+import { BaseController } from '@/core/BaseController';
 
 @Controller('duels')
 export class DuelsController extends BaseController {

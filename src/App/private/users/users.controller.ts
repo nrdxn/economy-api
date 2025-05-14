@@ -1,6 +1,7 @@
 import { Controller, Get, Req, Put, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request } from 'express';
+import { LeaderboardSortType } from './dto/RequestsDto';
 import BaseController from '@Core/BaseController';
 
 @Controller('users')
@@ -27,9 +28,9 @@ export class UsersController extends BaseController {
         if (checkAuth) return checkAuth;
 
         return await this.usersService.getLeaderboardByType({
-            type: type,
+            type: type as LeaderboardSortType,
             currentUser: currentUser
-        } as any);
+        });
     }
 
     @Put(':id/update-balance')

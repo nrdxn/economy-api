@@ -1,9 +1,9 @@
-export interface IRequestCreateOptions {
+export interface RequestCreateOptionsDto {
     message?: string;
     answer?: any;
 }
 
-export interface IRequestAnswer {
+export interface RequestAnswerDto {
     status: boolean;
     code: number;
     message?: string;
